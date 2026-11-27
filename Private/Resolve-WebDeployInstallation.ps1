@@ -1,9 +1,7 @@
 function Resolve-WebDeployInstallation {
-
 <#
 .SYNOPSIS
 Resolves Web Deploy installation information.
-
 .DESCRIPTION
 Retrieves Web Deploy installation details from the
 local or remote computer.
@@ -16,12 +14,10 @@ The function validates that:
 
 The function returns installation metadata that
 can be reused by other IISWebFarm functions.
-
 .OUTPUTS
 [PSCustomObject]
-
 .NOTES
-Author      : JP Kuipers
+Author      : theQuikest
 Version     : 1.1.0.0
 Last Updated: 2026-11-26
 #>

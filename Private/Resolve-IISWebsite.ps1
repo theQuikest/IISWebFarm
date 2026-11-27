@@ -2,9 +2,12 @@ function Resolve-IISWebsite {
 <#
 .SYNOPSIS
 Retrieves IIS website information.
-
 .OUTPUTS
 [PSCustomObject]
+.NOTES
+Author      : theQuikest
+Version     : 1.1.0.0
+Last Updated: 2026-11-26
 #>
 
     [CmdletBinding()]

@@ -16,7 +16,7 @@ Enables JSONL logging.
 Logging configuration and file locations
 used during execution.
 .NOTES
-Author      : JP Kuipers
+Author      : theQuikest
 Version     : 1.1.0.0
 Last Updated: 2026-11-26
 #>

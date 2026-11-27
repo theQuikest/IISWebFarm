@@ -2,9 +2,12 @@ function Resolve-WebsiteBinding {
 <#
 .SYNOPSIS
 Retrieves IIS website bindings.
-
 .OUTPUTS
 [PSCustomObject]
+.NOTES
+Author      : theQuikest
+Version     : 1.1.0.0
+Last Updated: 2026-11-26
 #>
 
     [CmdletBinding()]

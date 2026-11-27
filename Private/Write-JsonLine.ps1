@@ -19,7 +19,7 @@ None
 Writes data to log file.
 No pipeline output.
 .NOTES
-Author      : JP Kuipers
+Author      : theQuikest
 Version     : 1.1.0.0
 Last Updated: 2026-11-26
 #>

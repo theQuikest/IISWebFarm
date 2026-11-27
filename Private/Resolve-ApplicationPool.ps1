@@ -2,9 +2,12 @@ function Resolve-ApplicationPool {
 <#
 .SYNOPSIS
 Retrieves IIS Application Pool information.
-
 .OUTPUTS
 [PSCustomObject]
+.NOTES
+Author      : theQuikest
+Version     : 1.1.0.0
+Last Updated: 2026-11-26
 #>
 
     [CmdletBinding()]

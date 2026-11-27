@@ -22,6 +22,10 @@ If one or more servers fail validation a bootstrap
 failure log is written and execution terminates.
 .OUTPUTS
 [IISWebFarmRequirementResult[]]
+.NOTES
+Author      : theQuikest
+Version     : 1.1.0.0
+Last Updated: 2026-11-26
 #>
     [CmdletBinding()]
     param (

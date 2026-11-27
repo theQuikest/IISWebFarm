@@ -2,21 +2,16 @@ function Invoke-LogRetention {
 <#
 .SYNOPSIS
 Applies log retention to the logging directory.
-
 .DESCRIPTION
 Removes log files older than the configured retention period.
-
 .PARAMETER LogRoot
 Directory containing log files.
-
 .PARAMETER RetentionDays
 Number of days to retain log files.
-
 .OUTPUTS
 PSCustomObject
-
 .NOTES
-Author      : JP Kuipers
+Author      : theQuikest
 Version     : 1.1.0.0
 Last Updated: 2026-11-26
 #>

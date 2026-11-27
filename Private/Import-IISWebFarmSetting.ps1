@@ -2,24 +2,19 @@ function Import-IISWebFarmSetting {
 <#
 .SYNOPSIS
 Imports IISWebFarm configuration files.
-
 .DESCRIPTION
 Imports the Verify and Mail settings files and returns
 their contents as a single object.
-
 .PARAMETER SettingsPath
 Path to Verify-Settings.psd1.
-
 .PARAMETER MailSettingsPath
 Path to Verify-MailSettings.psd1.
-
 .OUTPUTS
 [IISWebFarmSettings]
 Combined IISWebFarm configuration object loaded from
 Verify-Settings.psd1 and Verify-MailSettings.psd1.
-
 .NOTES
-Author      : JP Kuipers
+Author      : theQuikest
 Version     : 1.1.0.0
 Last Updated: 2026-11-26
 #>

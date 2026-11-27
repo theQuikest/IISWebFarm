@@ -121,7 +121,7 @@ SEE ALSO
 
 NOTES
 
- Author : JP Kuipers
+ Author : theQuikest
 
  Version : 1.1.0.0
 

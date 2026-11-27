@@ -11,7 +11,6 @@ Configured checks from Verify-Settings.psd1.
 [String[]]
 
 Configured checks from Verify-Settings.psd1.
-
 .OUTPUTS
 [String[]]
 
@@ -19,7 +18,7 @@ Resolved and validated check names.
 Special values such as 'All' are expanded.
 Returned values are unique and sorted.
 .NOTES
-Author      : JP Kuipers
+Author      : theQuikest
 Version     : 1.1.0.0
 Last Updated: 2026-11-26
 #>

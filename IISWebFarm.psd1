@@ -21,10 +21,10 @@ ModuleVersion = '1.1.0.0'
 GUID = '16ef0674-8135-4c10-a422-870d8bf22270'
 
 # Author of this module
-Author = 'JP Kuipers'
+Author = 'theQuikest'
 
 # Company or vendor of this module
-CompanyName = 'Familie Kuipers'
+CompanyName = ''
 
 # Copyright statement for this module
 Copyright = '(c) JP Kuipers. All rights reserved.'

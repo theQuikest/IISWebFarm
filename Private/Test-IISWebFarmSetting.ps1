@@ -15,7 +15,7 @@ Import-IISWebFarmSettings.
 Validation result containing errors,
 warnings and overall configuration state.
 .NOTES
-Author      : JP Kuipers
+Author      : theQuikest
 Version     : 1.1.0.0
 Last Updated: 2026-11-26
 #>
