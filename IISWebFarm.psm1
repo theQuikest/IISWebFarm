@@ -1,9 +1,34 @@
-# Classes eerst laden
+# Core
 . $PSScriptRoot\Classes\BaseResult.ps1
+
+# Results
 . $PSScriptRoot\Classes\ValidationResult.ps1
 . $PSScriptRoot\Classes\HealthProbeResult.ps1
+. $PSScriptRoot\Classes\IISWebFarmRequirementResult.ps1
+
+# Aggregation
 . $PSScriptRoot\Classes\ServerValidationResult.ps1
 . $PSScriptRoot\Classes\ValidationReport.ps1
+
+# Exit Codes
+. $PSScriptRoot\Classes\IISWebFarmExitCodes.ps1
+
+# Base Exception
+. $PSScriptRoot\Classes\IISWebFarmException.ps1
+
+# Derived Exceptions
+. $PSScriptRoot\Classes\LoggingInitializationException.ps1
+. $PSScriptRoot\Classes\JsonLoggingException.ps1
+. $PSScriptRoot\Classes\ConfigurationImportException.ps1
+. $PSScriptRoot\Classes\SettingsValidationException.ps1
+. $PSScriptRoot\Classes\DnsValidationException.ps1
+. $PSScriptRoot\Classes\HttpsValidationException.ps1
+. $PSScriptRoot\Classes\HealthProbeException.ps1
+. $PSScriptRoot\Classes\WebsiteValidationException.ps1
+. $PSScriptRoot\Classes\ApplicationPoolValidationException.ps1
+. $PSScriptRoot\Classes\WebDeployValidationException.ps1
+. $PSScriptRoot\Classes\NotificationException.ps1
+. $PSScriptRoot\Classes\UnexpectedIISWebFarmException.ps1
 
 # Private
 Get-ChildItem `
@@ -30,22 +55,11 @@ ForEach-Object {
 $PublicFiles = Get-ChildItem `
     -Path "$PSScriptRoot\Public" `
     -Filter '*.ps1'
-
-Write-Host "Public Files Found: $($PublicFiles.Count)"
-
-$PublicFiles | ForEach-Object {
-    Write-Host $_.FullName
-}
-
-Write-Host "PSScriptRoot = [$PSScriptRoot]"
-Write-Host "Public Path  = [$PSScriptRoot\Public]"
-Write-Host "Loading Public Functions:"
-
-Get-Command -CommandType Function |
     Where-Object {
-        $_.Source -eq ''
-    } |
-    Select-Object Name
-
+    $_.BaseName -notlike '*.Tests'
+} |
+ForEach-Object {
+    . $_.FullName
+} #foreach
 
 Export-ModuleMember -Function *
