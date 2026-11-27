@@ -40,6 +40,12 @@ Last Updated: 2026-11-27
         # Defined as a constant for easier future maintenance.
         [int]$MinimumBuildNumber = 17763
 
+        # This setting checks if the OS is a Windows Server version
+        # IISWebFarm supports Windows Server only.
+        # Set to $false for development or lab environments.
+        # Adjust the build number to 
+        $RequireServerOperatingSystem = $true
+
         $Results = @()
     } #BEGIN
 
@@ -87,23 +93,28 @@ Last Updated: 2026-11-27
                 $OperatingSystem = Invoke-Command `
                     -ComputerName $Server `
                     -ScriptBlock {
-
                         Get-CimInstance `
                             -ClassName Win32_OperatingSystem
-
                     } `
                     -ErrorAction Stop
 
                 $Result.OperatingSystem =
-                    $OperatingSystem.Caption
+                $OperatingSystem.Caption
 
-                if (
-                    [int]$OperatingSystem.BuildNumber -lt $MinimumBuildNumber
-                )
+                if ($RequireServerOperatingSystem)
+                    {
+                        if ($OperatingSystem.ProductType -notin @(2,3))
+                            {
+                                $Result.FailureReasons += (
+                                    'A Windows Server operating system is required.'
+                                )
+                        } #if
+                } #if
+
+                if ([int]$OperatingSystem.BuildNumber -lt $MinimumBuildNumber)
                 {
                     $Result.FailureReasons += (
-                        'Windows Server 2019 or later ' +
-                        'is required.'
+                        'Windows Server 2019 or later is required.'
                     )
                 } #if
             } #try
@@ -228,7 +239,7 @@ Last Updated: 2026-11-27
             } #try
             catch {
                 $Result.FailureReasons += (
-                    'WebAdministration validation failed.'+
+                    'WebAdministration validation failed.' +
                     $_.Exception.Message
                 )
             } #catch
