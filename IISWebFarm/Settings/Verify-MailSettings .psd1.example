@@ -1,0 +1,64 @@
+#
+# Verify-MailSettings.psd1
+#
+# Description:
+# SMTP configuration for Verify-WebFarm.ps1.
+#
+# Last Updated:
+# 2026-11-25
+#
+
+@{
+
+    #
+    # SMTP server.
+    #
+    SmtpServer = 'mail.example.com'
+
+    #
+    # SMTP port.
+    #
+    SmtpPort = 25
+
+    #
+    # Enable TLS/SSL.
+    #
+    UseSsl = $false
+
+    #
+    # SMTP username.
+    #
+    # Set to $null to disable authentication.
+    #
+    Username = $null
+
+    #
+    # SMTP password.
+    #
+    # Set to $null when authentication is not used.
+    #
+    Password = $null
+
+    #
+    # Sender address.
+    #
+    From = 'alerts@example.com'
+
+    #
+    # Recipient addresses.
+    #
+    # Expected type:
+    # String array.
+    #
+    # Example:
+    #
+    # To = @(
+    #     'admin1@example.com'
+    #     'admin2@example.com'
+    # )
+    #
+    To = @(
+        'admin@example.com'
+    )
+
+} #Hashtable

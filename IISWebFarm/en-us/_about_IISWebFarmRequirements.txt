@@ -1,0 +1,202 @@
+TOPIC
+
+about_IISWebFarmRequirements
+
+SHORT DESCRIPTION
+
+Describes the supported platforms, software
+requirements and recommended configuration for
+IISWebFarm.
+
+LONG DESCRIPTION
+
+IISWebFarm is designed to validate, synchronize,
+backup and restore IIS-based web farms.
+
+The module helps maintain consistent
+configuration across multiple IIS servers and
+supports recovery scenarios through backup and
+restore operations.
+
+The module is intended for environments where
+multiple IIS servers host the same applications
+and configuration consistency is important.
+
+SUPPORTED OPERATING SYSTEMS
+
+The following operating systems are supported:
+
+* Windows Server 2022
+
+Earlier or later versions may work but have not yet been
+officially validated.
+
+REQUIRED SOFTWARE
+
+PowerShell
+
+* Windows PowerShell 5.1 or later
+
+The module is designed to remain compatible with
+Windows PowerShell 5.1 unless explicitly stated
+otherwise.
+
+IIS
+
+* IIS 10.0 or later
+
+The Web Server (IIS) role must be installed on
+all servers participating in validation.
+
+WEB DEPLOY
+
+Microsoft Web Deploy 4.0 or later is required.
+
+Web Deploy is used by IISWebFarm for validation
+of deployment synchronization and future
+deployment-related functionality.
+
+Download:
+
+https://aka.ms/webdeploydownload
+
+REQUIRED PERMISSIONS
+
+The account running IISWebFarm must have
+sufficient permissions to:
+
+* Read IIS configuration
+* Read Website bindings
+* Read Application Pools
+* Read Web Deploy configuration
+* Perform remote validation activities
+  (when applicable)
+
+Administrative privileges may be required
+depending on the checks being performed.
+
+DNS REQUIREMENTS
+
+DNS validation assumes:
+
+* Authoritative DNS records exist
+* Hostnames resolve correctly
+* DNS infrastructure is functioning normally
+
+Systems relying solely on local hosts files are
+not considered supported for DNS validation.
+
+HEALTH PROBE REQUIREMENTS
+
+Health validation assumes that applications
+provide a dedicated health endpoint.
+
+Examples:
+
+* /health
+* /adfs/probe
+
+Health endpoints should:
+
+* Return HTTP 200 when healthy
+* Execute quickly
+* Avoid authentication requirements
+
+SUPPORTED TOPOLOGIES
+
+IISWebFarm is intended for environments where:
+
+* Multiple IIS servers host the same application
+* Failover capability is desired
+* Configuration consistency is important
+
+The module is commonly used with two-node IIS
+farms but does not require a specific number of
+servers.
+
+Microsoft Learn:
+IIS Documentation
+https://learn.microsoft.com/iis/
+
+RECOMMENDED CONFIGURATION
+
+Group Managed Service Accounts (gMSA)
+
+gMSA accounts are recommended for:
+
+* Application Pools
+* Service identities
+
+Benefits include:
+
+* Automatic password management
+* Reduced credential exposure
+* Simplified operational security
+
+Group Managed Service Accounts overview:
+https://learn.microsoft.com/windows-server/security/group-managed-service-accounts/group-managed-service-accounts-overview
+
+DEDICATED HEALTH ENDPOINTS
+
+Dedicated health endpoints are strongly
+recommended for all hosted applications.
+
+CENTRALIZED MONITORING
+
+Examples:
+
+* Wazuh
+* Other SIEM solutions
+
+Centralized monitoring provides better visibility
+and retention than local log storage.
+
+OPTIONAL INTEGRATIONS
+
+The following integrations are supported but not
+required:
+
+* Active Directory
+* gMSA
+* SMTP Relay
+* Wazuh
+* Internal PKI
+* HAProxy
+* Other load balancers
+
+KNOWN LIMITATIONS
+
+IISWebFarm validates the environment it can
+observe.
+
+Validation quality depends on:
+
+* DNS accuracy
+* IIS configuration consistency
+* Health endpoint quality
+* Web Deploy configuration
+
+DESIGN GOAL
+
+The primary goal of IISWebFarm is to provide a
+repeatable and automatable method of validating
+IIS web farms and detecting configuration drift
+before it causes production issues.
+
+SEE ALSO
+
+about_IISWebFarm
+
+about_IISWebFarmConfiguration
+
+about_IISWebFarmLogging
+
+about_IISWebFarmExitCodes
+
+NOTES
+
+Author : JP Kuipers
+
+Version : 1.1.0.0
+
+Last Updated : 2026-11-26

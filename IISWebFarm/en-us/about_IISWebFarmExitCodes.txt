@@ -1,0 +1,177 @@
+TOPIC
+
+about_IISWebFarmExitCodes
+
+SHORT DESCRIPTION
+
+Describes IISWebFarm exit codes.
+
+LONG DESCRIPTION
+
+IISWebFarm uses deterministic exit codes to
+support automation, monitoring and unattended
+execution.
+
+Exit codes are grouped by functional area to
+simplify troubleshooting and monitoring.
+
+EXIT CODE RANGES
+
+0
+
+Success
+
+10-19
+
+Logging subsystem failures.
+
+20-29
+
+Configuration and settings failures.
+
+30-39
+
+Health probe failures.
+
+40-49
+
+Notification failures.
+
+50-59
+
+DNS validation failures.
+
+60-69
+
+HTTPS validation failures.
+
+70-79
+
+Website validation failures.
+
+80-89
+
+Application Pool validation failures.
+
+90-98
+
+Web Deploy validation failures.
+
+99
+
+Unexpected failures.
+
+IMPLEMENTED EXIT CODES
+
+0
+
+Success
+
+Execution completed successfully.
+
+10
+
+LoggingInitializationFailure
+
+Failed to initialize logging.
+
+11
+
+LogRetentionFailure
+
+Failed to process log retention.
+
+12
+
+JsonLoggingFailure
+
+Failed to write JSONL output.
+
+20
+
+SettingsValidationFailure
+
+Configuration validation failed.
+
+21
+
+ConfigurationImportException
+
+Configuration import failed.
+
+30
+
+HealthProbeFailure
+
+Health probe validation failed.
+
+40
+
+NotificationFailure
+
+Notification delivery failed.
+
+50
+
+DnsFailure
+
+DNS validation failed.
+
+60
+
+HttpsFailure
+
+HTTPS validation failed.
+
+70
+
+WebsiteValidationFailure
+
+Website validation failed.
+
+80
+
+ApplicationPoolValidationFailure
+
+Application Pool validation failed.
+
+90
+
+WebDeployFailure
+
+Web Deploy validation failed.
+
+99
+
+UnexpectedError
+
+Unhandled or unexpected failure.
+
+DESIGN GOALS
+
+Exit codes are intended for:
+
+* Scheduled Tasks
+* Monitoring Systems
+* Wazuh
+* CI/CD Pipelines
+
+EXIT CODE RULES
+
+A single failure category should map to a single
+well-defined exit code.
+
+Exit code meanings should remain stable across
+module versions whenever possible.
+
+When introducing new exit codes, the existing
+numbering ranges should be preserved.
+
+EXCEPTION MAPPING
+
+Most IISWebFarm exceptions are intended to map
+directly to a corresponding exit code.
+
+For exception details see:
+
+about_IISWebFarmExceptions

@@ -1,0 +1,112 @@
+TOPIC
+
+about_IISWebFarmExceptions
+
+SHORT DESCRIPTION
+
+Describes the IISWebFarm exception hierarchy.
+
+LONG DESCRIPTION
+
+IISWebFarm uses custom exceptions to provide
+consistent error handling and deterministic
+exit-code mapping.
+
+The module favors terminating exceptions over
+silent failures.
+
+EXCEPTION HIERARCHY
+
+IISWebFarmException
+
+Base exception for all module-specific failures.
+
+Derived Exceptions:
+
+* LoggingInitializationException
+* LogRetentionException
+* ConfigurationImportException
+* SettingsValidationException
+* DnsValidationException
+* HttpsValidationException
+* HealthProbeException
+* WebsiteValidationException
+* ApplicationPoolValidationException
+* WebDeployValidationException
+* NotificationException
+* UnexpectedIISWebFarmException
+
+EXCEPTION GUIDELINES
+
+Custom exceptions should:
+
+* Inherit from IISWebFarmException
+* Communicate a single failure type
+* Provide actionable messages
+* Preserve InnerException where possible
+
+FAILURE BEHAVIOR
+
+Configuration and execution failures are
+considered terminating conditions.
+
+Returning $null should be avoided when an
+exception better represents the failure.
+
+EXIT CODES
+
+Exceptions are intended to map to deterministic
+module exit codes.
+
+This allows integration with:
+
+* Scheduled Tasks
+* Monitoring solutions
+* Wazuh
+* CI/CD systems
+
+EXIT CODE MAPPING
+
+All IISWebFarm exceptions are intended to map
+to deterministic exit codes.
+
+This allows calling processes to distinguish
+between failure categories without parsing
+log output.
+
+Examples include:
+
+* Configuration failures
+* DNS validation failures
+* HTTPS validation failures
+* Health probe failures
+* Logging failures
+
+For a complete mapping see:
+
+about_IISWebFarmExitCodes
+
+ADDING NEW EXCEPTIONS
+
+New exceptions should only be created when a
+failure type requires distinct handling or a
+separate exit code.
+
+Avoid creating exceptions that differ only by
+message text.
+
+SEE ALSO
+
+about_IISWebFarm
+
+about_IISWebFarmLogging
+
+about_IISWebFarmExitCodes
+
+NOTES
+
+Author : JP Kuipers
+
+Version : 1.1.0.0
+
+Last Updated : 2026-11-26

@@ -1,0 +1,128 @@
+Last Updated : 2026-11-26
+
+Module Version: 1.1.0.0
+
+TOPIC
+
+ about_IISWebFarm
+
+SHORT DESCRIPTION
+
+ IISWebFarm provides validation, synchronization,
+ backup and recovery functionality for IIS-based
+ web farms.
+
+LONG DESCRIPTION
+
+ IISWebFarm is designed to validate, synchronize,
+ backup and restore IIS environments consisting of
+ one or more servers.
+
+ The module focuses on maintaining configuration
+ consistency across IIS web farms and detecting
+ configuration drift before it impacts production
+ services.
+
+ IISWebFarm provides functionality for:
+
+ * Validation
+ * Backup
+ * Restore
+ * Synchronization
+ * Drift detection
+ * Health validation
+ * Structured reporting
+
+ Validation is used to determine whether
+ synchronization or corrective action is required.
+
+ The module is intended for both operational
+ maintenance and automated execution through:
+
+ * Scheduled Tasks
+ * Monitoring platforms
+ * SIEM integrations
+ * CI/CD pipelines
+
+ Although commonly used in two-node IIS failover
+ environments, IISWebFarm is designed to support
+ web farms of any size.
+
+CONFIGURATION
+
+ The module uses the following configuration
+ files:
+
+ * Verify-Settings.psd1
+ * Verify-MailSettings.psd1
+
+ For detailed configuration information see:
+
+ * about_IISWebFarmConfiguration
+
+ARCHITECTURE
+
+ Additional architectural information is available
+ in the project documentation:
+
+ * ADR.md
+ * Reasoning.md
+ * DesignPrinciples.md
+
+OBJECTS AND OUTPUT
+
+ IISWebFarm makes extensive use of strongly typed
+ PowerShell classes.
+
+ For detailed information regarding implemented
+ classes and output types see:
+
+ * about_IISWebFarmClasses
+
+ERROR HANDLING
+
+ IISWebFarm uses a centralized exception model and
+ deterministic exit codes.
+
+ For details see:
+
+ * about_IISWebFarmExceptions
+ * about_IISWebFarmExitCodes
+
+LOGGING
+
+ IISWebFarm supports structured logging and
+ optional JSONL output.
+
+ For details see:
+
+ * about_IISWebFarmLogging
+
+FUTURE DEVELOPMENT
+
+ Planned functionality and roadmap information can
+ be found in:
+
+ * FutureAbout.md
+
+SEE ALSO
+
+ Verify-WebFarm
+
+ about_IISWebFarmConfiguration
+
+ about_IISWebFarmClasses
+
+ about_IISWebFarmExceptions
+
+ about_IISWebFarmLogging
+
+ about_IISWebFarmExitCodes
+
+NOTES
+
+ Author : JP Kuipers
+
+ Version : 1.1.0.0
+
+ Last Updated : 2026-11-26

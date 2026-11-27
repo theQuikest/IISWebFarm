@@ -1,0 +1,217 @@
+#
+# Verify-Settings.psd1
+#
+# Description:
+# Configuration file for Verify-WebFarm.ps1.
+#
+# Version:
+# 1.1.0.0
+#
+# Last Updated:
+# 2026-11-25
+#
+
+@{
+
+    #
+    # Configuration schema version.
+    #
+    # Verify-WebFarm.ps1 validates this version
+    # before processing the configuration.
+    #
+    SchemaVersion = '1.1.0.0'
+
+    #
+    # Source of Truth
+    #
+    # All IIS comparisons are performed against
+    # this server.
+    #
+    # Certificate validation is intentionally
+    # excluded from this process.
+    #
+    MasterServer = 'IISserver1'
+
+    #
+    # Destination servers to validate.
+    #
+    # Expected type:
+    # String array.
+    #
+    # Example:
+    #
+    # DestinationServers = @(
+    #     'IISserver2'
+    #     'IISserver3'
+    # )
+    #
+    DestinationServers = @(
+        'IISserver2'
+    )
+
+    #
+    # Websites to validate.
+    #
+    # Supported values:
+    #
+    # 'All'
+    #
+    # or
+    #
+    # String array containing IIS site names.
+    #
+    # Example:
+    #
+    # Websites = @(
+    #     'Default Web Site'
+    #     'example.com'
+    # )
+    #
+    Websites = 'All'
+
+    #
+    # Application Pools to validate.
+    #
+    # Supported values:
+    #
+    # 'All'
+    #
+    # or
+    #
+    # String array containing Application Pool names.
+    #
+    # Example:
+    #
+    # ApplicationPools = @(
+    #     'DefaultAppPool'
+    #     'ExampleAppPool'
+    # )
+    #
+    ApplicationPools = 'All'
+
+    #
+    # Backend Health Probe.
+    #
+    # Executed directly against each node.
+    #
+    # Examples:
+    #
+    # http://iisserver1/health
+    # http://iisserver2/health
+    #
+    # Similar to:
+    #
+    # http://server/adfs/probe
+    #
+    # The check performs a HTTP GET request and
+    # expects the configured ExpectedStatus code.
+    #
+    # The default expectation is:
+    #
+    # HTTP/1.1 200 OK
+    #
+    # The health probe intentionally bypasses:
+    #
+    # - Reverse proxies and load balancers
+    # - DNS load balancing
+    # - TLS
+    # - SNI
+    #
+    # This verifies the individual node rather
+    # than the published service.
+    #
+    HealthProbe = @{
+
+        #
+        # Relative probe path.
+        #
+        Path = '/health'
+
+        #
+        # Expected HTTP response code.
+        #
+        ExpectedStatus = 200
+
+        #
+        # Request timeout in seconds.
+        #
+        TimeoutSeconds = 10
+
+    } #Hashtable
+
+    #
+    # Verification checks.
+    #
+    # Supported values:
+    #
+    # 'All'
+    #
+    # or
+    #
+    # String array containing check names.
+    #
+    # Available checks:
+    #
+    # WebDeploy
+    # Websites
+    # AppPools
+    # DNS
+    # HTTPS
+    # HealthProbe
+    #
+    # Example:
+    #
+    # Checks = @(
+    #     'WebDeploy'
+    #     'Websites'
+    #     'AppPools'
+    # )
+    #
+    Checks = 'All'
+
+    #
+    # JSON Lines logging.
+    #
+    # Supported values:
+    #
+    # $true
+    # $false
+    #
+    # When enabled, a .jsonl file is written
+    # alongside the standard transcript log.
+    #
+    # This can be consumed by:
+    #
+    # - Wazuh
+    # - OpenSearch
+    # - Elastic
+    # - Other SIEM solutions
+    #
+    JsonLines = $false
+
+    #
+    # Log retention settings.
+    #
+    # Recommended default:
+    #
+    # 30 days
+    #
+    # If your environment uses a central
+    # logging platform that saves logs
+    # consider lowering this limit to 7 days.
+    #
+    # If disabled, logs are written but not removed.
+    # Please keep an eye on your disk space.
+    #
+    LogRetention = @{
+
+        Enabled = $true
+
+        #
+        # Retention period in days.
+        #
+        RetentionDays = 7
+
+    } #Hashtable
+
+} #Hashtable

@@ -1,0 +1,104 @@
+TOPIC
+
+about_IISWebFarmLogging
+
+SHORT DESCRIPTION
+
+Describes logging behavior used by IISWebFarm.
+
+LONG DESCRIPTION
+
+IISWebFarm provides structured logging designed
+for both operational troubleshooting and
+monitoring integrations.
+
+The logging subsystem focuses on producing useful
+artifacts while preventing uncontrolled log
+growth.
+
+IMPLEMENTED FUNCTIONS
+
+Initialize-Logging
+
+Creates logging infrastructure and establishes
+runtime log locations.
+
+Invoke-LogRetention
+
+Removes expired log files according to retention
+settings.
+
+Write-JsonLine
+
+Writes structured JSONL records to log files.
+
+TEXT LOGGING
+
+Human-readable log files are intended for
+operational troubleshooting and diagnostics.
+
+JSONL LOGGING
+
+JSONL output is supported for integration with
+monitoring and SIEM solutions.
+
+Examples:
+
+* Wazuh
+* Other SIEM solutions
+* Future dashboard integrations
+
+JSONL logging is optional.
+
+RETENTION
+
+Log retention is enforced automatically.
+
+The logging subsystem is responsible for removing
+expired files according to configured retention
+settings.
+
+DESIGN PRINCIPLES
+
+Logs are temporary operational artifacts.
+
+Long-term retention should be handled by a
+centralized monitoring platform rather than the
+application itself.
+
+FAILURE HANDLING
+
+Logging failures generate dedicated exceptions.
+
+Examples:
+
+* LoggingInitializationException
+* LogRetentionException
+
+Logging should fail predictably and report the
+root cause whenever possible.
+
+FUTURE DIRECTION
+
+Future versions may introduce:
+
+* Correlation IDs
+* Structured metrics
+* Centralized log shipping
+* Dashboard integrations
+
+SEE ALSO
+
+about_IISWebFarm
+
+about_IISWebFarmExceptions
+
+about_IISWebFarmConfiguration
+
+NOTES
+
+Author : JP Kuipers
+
+Version : 1.1.0.0
+
+Last Updated : 2026-11-26
