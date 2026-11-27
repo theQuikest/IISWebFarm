@@ -18,13 +18,27 @@ Describe 'Write-JsonLine' {
             -Path $JsonFile `
             -ItemType File `
             -Force | Out-Null
+
+        $TestData = [ordered]@{
+            ServerName = 'TestServer'
+
+            CheckName = 'TestCheck'
+
+            ResultName = 'TestResult'
+
+            PropertyName = 'TestProperty'
+
+            PropertyValue = 'TestValue'
+
+            Message = 'Test Message'
+        }
     } #BeforeEach
 
     It 'Writes a JSONL record' {
         $Object = [PSCustomObject]@{
-            Check  = 'HealthProbe'
+            Check = $TestData.CheckName
 
-            Result = 'Success'
+            Result = $TestData.ResultName
         }
 
         Write-JsonLine `
@@ -40,7 +54,8 @@ Describe 'Write-JsonLine' {
 
     It 'Creates valid JSON' {
         $Object = [PSCustomObject]@{
-            Server = 'FAMWEB1'
+
+            Server = $TestData.ServerName
         }
 
         Write-JsonLine `
@@ -59,7 +74,8 @@ Describe 'Write-JsonLine' {
 
     It 'Contains Timestamp property' {
         $Object = [PSCustomObject]@{
-            Server = 'FAMWEB1'
+
+            Server = $TestData.ServerName
         }
 
         Write-JsonLine `
@@ -79,7 +95,8 @@ Describe 'Write-JsonLine' {
 
     It 'Contains Data property' {
         $Object = [PSCustomObject]@{
-            Server = 'FAMWEB1'
+            $($TestData.PropertyName) =
+                $TestData.PropertyValue
         }
 
         Write-JsonLine `
@@ -93,24 +110,23 @@ Describe 'Write-JsonLine' {
             ConvertFrom-Json
         )
 
-        $Record.Data.Server |
-            Should -Be 'FAMWEB1'
+        $Record.Data.$($TestData.PropertyName) |
+            Should -Be $TestData.PropertyValue
     } #it
 
     It 'Appends multiple records' {
         1..3 | ForEach-Object {
-
             Write-JsonLine `
                 -Path $JsonFile `
                 -InputObject @{
                     Number = $_
                 }
-
         } #foreach
 
         (
             Get-Content `
                 -Path $JsonFile
+
         ).Count |
             Should -Be 3
     } #it
@@ -124,18 +140,16 @@ Describe 'Write-JsonLine' {
             Write-JsonLine `
                 -Path $JsonFile `
                 -InputObject @{
-                    Test = 'Value'
+                    Test = $TestData.PropertyValue
                 }
-
         } | Should -Throw `
             -ExceptionType JsonLoggingException
     } #it
 
     It 'JsonLoggingException contains correct exit code' {
-        $Exception =
-            :new(
-                'Test Message'
-            )
+        $Exception = :new(
+            $TestData.Message
+        )
 
         $Exception.ExitCode |
             Should -Be (
