@@ -194,9 +194,9 @@
 
 ✅ IISWebFarmRequirementResult
 
-⏳ Test-ModuleRequirements
+✅ Test-ModuleRequirements
 
-⏳ Bootstrap failure logging
+✅ Bootstrap failure logging
 
 ⏳ Pester tests
 
