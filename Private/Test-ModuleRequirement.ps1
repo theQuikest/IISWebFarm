@@ -1,62 +1,59 @@
 function Test-ModuleRequirements {
 <#
 .SYNOPSIS
-Validates IISWebFarm prerequisites.
+Validates IISWebFarm module requirements.
 .DESCRIPTION
-Validates all servers configured for IISWebFarm.
+Validates all servers against the minimum
+requirements needed by IISWebFarm.
 
-The function verifies:
+The function tests:
 
 * WinRM connectivity
-* Supported operating system
-* Supported PowerShell version
+* Windows Server version
+* PowerShell version
 * IIS installation
-* W3SVC service state
-* WebAdministration module
+* W3SVC status
+* WebAdministration availability
 * Web Deploy installation
 
-All failures are collected and returned in a
-single execution.
-
-If one or more servers fail validation a bootstrap
-failure log is written and execution terminates.
+All servers are evaluated and all failures are
+collected before execution stops.
 .OUTPUTS
 [IISWebFarmRequirementResult[]]
 .NOTES
 Author      : theQuikest
 Version     : 1.1.0.0
-Last Updated: 2026-11-26
+Last Updated: 2026-11-27
 #>
     [CmdletBinding()]
     param (
-
         [Parameter()]
         [string[]]
         $ComputerName = $env:COMPUTERNAME
     ) #param
 
     BEGIN {
-        $Results = New-Object `
-            System.Collections.Generic.List[
-                IISWebFarmRequirementResult
-            ]
+        Write-Verbose ("Initializing requirement validation.")
+
+        # Minimum supported Windows Server build.
+        # Build 17763 equals Windows Server 2019.
+        # Defined as a constant for easier future maintenance.
+        [int]$MinimumBuildNumber = 17763
+
+        $Results = @()
     } #BEGIN
 
     PROCESS {
         foreach ($Server in $ComputerName)
         {
-            Write-Verbose (
-                "Validating [$Server]."
-            )
+            Write-Verbose ("Validating requirements on [$Server].")
 
-            $Result = :new()
+            $Result = [IISWebFarmRequirementResult]::new()
 
             $Result.ComputerName = $Server
 
-            $Result.Passed = $true
-
-            # WinRM
-
+        # WinRM
+    
             try {
                 Test-WSMan `
                     -ComputerName $Server `
@@ -64,11 +61,9 @@ Last Updated: 2026-11-26
                 | Out-Null
 
                 $Result.WinRMAvailable = $true
-
-            }
+            } #try
             catch {
                 $Result.WinRMAvailable = $false
-
                 $Result.Passed = $false
 
                 $Result.FailureReasons += (
@@ -76,110 +71,110 @@ Last Updated: 2026-11-26
                     $_.Exception.Message
                 )
 
-                $Results.Add($Result)
+                $Results += $Result
+
+                Write-Verbose (
+                    "WinRM validation failed on [$Server]."
+                )
 
                 continue
+
             } #catch
 
-            # Operating System
+        # Operating System
 
             try {
-                $OperatingSystem =
-                    Invoke-Command `
-                        -ComputerName $Server `
-                        -ScriptBlock {
-                            Get-CimInstance `
-                                Win32_OperatingSystem
-                        } `
-                        -ErrorAction Stop
+                $OperatingSystem = Invoke-Command `
+                    -ComputerName $Server `
+                    -ScriptBlock {
+
+                        Get-CimInstance `
+                            -ClassName Win32_OperatingSystem
+
+                    } `
+                    -ErrorAction Stop
 
                 $Result.OperatingSystem =
                     $OperatingSystem.Caption
 
                 if (
-                    [int]$OperatingSystem.BuildNumber -lt 17763
+                    [int]$OperatingSystem.BuildNumber -lt $MinimumBuildNumber
                 )
                 {
-                    $Result.Passed = $false
-
                     $Result.FailureReasons += (
                         'Windows Server 2019 or later ' +
                         'is required.'
                     )
                 } #if
-            }
+            } #try
             catch {
-                $Result.Passed = $false
-
                 $Result.FailureReasons += (
-                    'Operating System validation failed.'
+                    'Operating System validation failed.' +
+                    $_.Exception.Message
                 )
-
             } #catch
 
-            # PowerShell
-
+        # PowerShell
+            
             try {
-                $Version =
-                    Invoke-Command `
-                        -ComputerName $Server `
-                        -ScriptBlock {
-                            $PSVersionTable.PSVersion
-                        } `
-                        -ErrorAction Stop
+                $Version = Invoke-Command `
+                    -ComputerName $Server `
+                    -ScriptBlock {
+
+                        $PSVersionTable.PSVersion
+                    } `
+                    -ErrorAction Stop
 
                 $Result.PowerShellVersion =
                     [version]$Version
 
-                if ($Version -lt [version]'5.1')
+                if (
+                    $Version -lt [version]'5.1'
+                )
                 {
-                    $Result.Passed = $false
-
                     $Result.FailureReasons += (
                         'PowerShell 5.1 or later is required.'
                     )
                 } #if
-            }
+            } #try
             catch {
-                $Result.Passed = $false
-
                 $Result.FailureReasons += (
-                    'PowerShell validation failed.'
+                    'PowerShell validation failed.' +
+                    $_.Exception.Message
                 )
             } #catch
 
-            # IIS
+        # IIS
 
             try {
                 $Result.IISInstalled =
                     Invoke-Command `
                         -ComputerName $Server `
                         -ScriptBlock {
+
                             (
                                 Get-WindowsFeature `
                                     -Name Web-Server
                             ).Installed
+
                         } `
                         -ErrorAction Stop
 
                 if (-not $Result.IISInstalled)
                 {
-                    $Result.Passed = $false
-
                     $Result.FailureReasons += (
                         'IIS is not installed.'
                     )
                 } #if
-            }
+            } #try
             catch {
-                $Result.Passed = $false
-
                 $Result.FailureReasons += (
-                    'IIS validation failed.'
+                    'IIS validation failed. ' +
+                    $_.Exception.Message
                 )
             } #catch
 
-            # W3SVC
+        # W3SVC
 
             try {
                 $Result.W3SVCRunning =
@@ -195,22 +190,19 @@ Last Updated: 2026-11-26
 
                 if (-not $Result.W3SVCRunning)
                 {
-                    $Result.Passed = $false
-
                     $Result.FailureReasons += (
                         'W3SVC service is not running.'
                     )
                 } #if
-            }
+            } #try
             catch {
-                $Result.Passed = $false
-
                 $Result.FailureReasons += (
-                    'W3SVC validation failed.'
+                    'W3SVC validation failed.' +
+                    $_.Exception.Message
                 )
             } #catch
 
-            # WebAdministration
+        # WebAdministration
 
             try {
                 $Result.WebAdministrationAvailable =
@@ -223,103 +215,98 @@ Last Updated: 2026-11-26
                                     -Name WebAdministration
                             )
                         } `
-                        -ErrorAction Stop
+                -ErrorAction Stop
 
                 if (
                     -not $Result.WebAdministrationAvailable
                 )
                 {
-                    $Result.Passed = $false
-
                     $Result.FailureReasons += (
                         'WebAdministration module not found.'
                     )
                 } #if
-            }
+            } #try
             catch {
-                $Result.Passed = $false
-
                 $Result.FailureReasons += (
-                    'WebAdministration validation failed.'
+                    'WebAdministration validation failed.'+
+                    $_.Exception.Message
                 )
-
             } #catch
 
-            # Web Deploy
+        # Web Deploy
 
             try {
                 $WebDeploy =
                     Resolve-WebDeployInstallation `
                         -ComputerName $Server
 
-                $Result.WebDeployVersion =
-                    [version]$WebDeploy.Version
+                if ($WebDeploy.Version)
+                    {
+                        $Result.WebDeployVersion =
+                            [version]$WebDeploy.Version
+                } #if
 
-                $Result.WebDeployPath =
-                    $WebDeploy.ExecutablePath
+                if ($WebDeploy.ExecutablePath)
+                    {
+                        $Result.WebDeployPath =
+                            $WebDeploy.ExecutablePath
+                } #if
 
                 if (-not $WebDeploy.Installed)
-                {
-                    $Result.Passed = $false
-
-                    $Result.FailureReasons += (
-                        'Web Deploy is not installed.'
-                    )
+                    {
+                        $Result.FailureReasons += (
+                            'Web Deploy is not installed.'
+                        )
                 } #if
 
                 if (-not $WebDeploy.ExecutableExists)
-                {
-                    $Result.Passed = $false
-
-                    $Result.FailureReasons += (
-                        'msdeploy.exe not found.'
-                    )
-                } #if
+                    {
+                        $Result.FailureReasons += (
+                            'msdeploy.exe not found.'
+                        )
+                    } #if
 
                 if (
-                    [version]$WebDeploy.Version `
-                        -lt `
-                    [version]'4.0'
+                    $Result.WebDeployVersion -and
+                    $Result.WebDeployVersion -lt [version]'4.0'
                 )
                 {
-                    $Result.Passed = $false
-
                     $Result.FailureReasons += (
                         'Web Deploy 4.0 or later is required.'
                     )
                 } #if
-
-            }
+            } #try
             catch {
-                $Result.Passed = $false
-
                 $Result.FailureReasons += (
-                    'Web Deploy validation failed.'
+                    'Web Deploy validation failed.' +
+                    $_.Exception.Message
                 )
             } #catch
 
-            $Results.Add($Result)
+        # Final Result
+
+            $Result.Passed =
+                ($Result.FailureReasons.Count -eq 0)
+
+            $Results += $Result
         } #foreach
     } #PROCESS
 
     END {
-        $FailedResults = $Results |
+        $FailedResults = @(
+            $Results |
             Where-Object Passed -eq $false
+        )
 
-        if ($FailedResults)
+        if ($FailedResults.Count -gt 0)
         {
-            # Bootstrap logging
-            # TODO
+            #
+            # TODO:
+            # Bootstrap failure logging.
+            #
 
-            Write-Host (
-                'IISWebFarm requirements validation failed.'
-            ) -ForegroundColor Red
-
-            throw :new(
-                (
-                    'One or more servers failed ' +
-                    'module requirements validation.'
-                )
+            throw [SettingsValidationException]::new(
+                'One or more servers failed module requirements validation.'
             )
         } #if
 
