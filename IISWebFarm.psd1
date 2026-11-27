@@ -27,7 +27,7 @@ Author = 'theQuikest'
 CompanyName = ''
 
 # Copyright statement for this module
-Copyright = '(c) JP Kuipers. All rights reserved.'
+Copyright = '(c) theQuikest. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = 'This module contains functions to verify, copy, backup and restore IIS configuration(s), Web Site(s) and AppPool(s)'
